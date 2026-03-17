@@ -6,8 +6,8 @@ import (
 	"time"
 )
 
-func Logging(next http.Handler) http.handler {
-	return http.HandleFunc(func(w http.ResponseWriter, r *http.Request) {
+func Logging(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 		next.ServeHTTP(w, r)
 		log.Printf("%s %s %v", r.Method, r.URL.Path, time.Since(start))
@@ -15,7 +15,7 @@ func Logging(next http.Handler) http.handler {
 }
 
 func Recovery(next http.Handler) http.Handler {
-	return http.HandleFunc(func(w http.ResponseWriter, r *http.Request) {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
 				log.Println("PANIC:", err)

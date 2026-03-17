@@ -1,8 +1,8 @@
 package router
 
 import (
-	"Task Manager API project/internal/handlers"
-	"Task Manager API project/internal/middleware"
+	"Task_Manager_API_project/internal/handlers"
+	"Task_Manager_API_project/internal/middleware"
 	"net/http"
 )
 

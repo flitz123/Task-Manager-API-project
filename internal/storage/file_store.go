@@ -4,7 +4,7 @@ import(
 	"encoding/json"
 	"os"
 	"sync"
-	"Task Manager API project/internal/models"
+	"Task_Manager_API_project/internal/models"
 )
 
 type FileStore struct{
@@ -13,37 +13,37 @@ type FileStore struct{
 	tasks []models.Task
 }
 
-func NewFileStore{file string} *FileStore{
-	store := &FileStore{file: file}
+func NewFileStore(file string) *FileStore{
+	store := &FileStore{File: file}
 	store.load()
 	return store
 }
 
 func (s *FileStore)load(){
-	data, err := os.ReadFile(s.file)
+	data, err := os.ReadFile(s.File)
 	if err != nil{
-		s.stacks = []models.Task{}
+		s.tasks = []models.Task{}
 		return 
 	}
-	_ = json.Unmarshal(data, &s.stacks)
+	_ = json.Unmarshal(data, &s.tasks)
 }
 
 func (s *FileStore)save(){
-	data, _ = json.MarshalIndent(s.stacks, "", "  ")
-	_ = os.WriteFile(os.file, data, 0644)
+	data, _ := json.MarshalIndent(s.tasks, "", "  ")
+	_ = os.WriteFile(s.File, data, 0644)
 }
 
-func (s *FileStore) GetAll []models.Task{
+func (s *FileStore) GetAll() []models.Task{
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	return s.stack
+	return s.tasks
 }
 
-func (s *FileStore) GetById(id int) (models.Task, bool){
+func (s *FileStore) GetByID(id int) (models.Task, bool){
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	for _, t := range s.stacks{
+	for _, t := range s.tasks{
 		if t.ID == id{
 			return t, true
 		}
@@ -53,24 +53,24 @@ func (s *FileStore) GetById(id int) (models.Task, bool){
 
 func (s *FileStore) Add(task models.Task) models.Task{
 	s.mu.Lock()
-	s.mu.Unlock()
+	defer s.mu.Unlock()
 
-	task.ID = len(s.stack) + 1
-	s.stacks = append(s.stacks, task)
+	task.ID = len(s.tasks) + 1
+	s.tasks = append(s.tasks, task)
 	s.save()
 	return task
 }
 
 func (s *FileStore) Update(id int, updated models.Task) (models.Task, bool){
 	s.mu.Lock()
-	s.mu.Unlock()
+	defer s.mu.Unlock()
 
-	for i, t := range s.stacks{
+	for i, t := range s.tasks{
 		if t.ID == id{
 			updated.ID = id
 			s.tasks[i] = updated
 			s.save()
-			return updated, id
+			return updated, true
 		}
 	}
 	return models.Task{}, false
@@ -78,11 +78,11 @@ func (s *FileStore) Update(id int, updated models.Task) (models.Task, bool){
 
 func (s *FileStore) Delete(id int) bool{
 	s.mu.Lock()
-	s.mu.Unlock()
+	defer s.mu.Unlock()
 
-	for i, t := range s.stacks{
+	for i, t := range s.tasks{
 		if t.ID == id{
-			s.stacks = append(s.stacks[:1], s.stacks[i+1:]...)
+			s.tasks = append(s.tasks[:i], s.tasks[i+1:]...)
 			s.save()
 			return true
 		}

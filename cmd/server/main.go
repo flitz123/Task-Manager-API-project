@@ -1,9 +1,9 @@
 package main
 
 import (
-	"Task Manager API project/internal/handlers"
-	"Task Manager API project/internal/routers"
-	"Task Manager API project/internal/storage"
+	"Task_Manager_API_project/internal/handlers"
+	"Task_Manager_API_project/internal/router"
+	"Task_Manager_API_project/internal/storage"
 	"log"
 	"net/http"
 )
@@ -18,5 +18,5 @@ func main() {
 	}
 
 	log.Println("Server running on http://localhost:8080")
-	log.Ftal(server.ListenAndServe())
+	log.Fatal(server.ListenAndServe())
 }
