@@ -6,14 +6,23 @@ import (
 	"Task_Manager_API_project/internal/storage"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
-	store := storage.NewFileStore("data/tasks.json")
+	dataFile := os.Getenv("TASK_DATA_FILE")
+	if dataFile == "" {
+		dataFile = "data/tasks.json"
+	}
+	store := storage.NewFileStore(dataFile)
 	handler := handlers.NewTaskHandler(store)
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 	server := &http.Server{
-		Addr:    ":8080",
+		Addr:    ":" + port,
 		Handler: router.Setup(handler),
 	}
 

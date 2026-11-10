@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6f7fb">
+  <title>Task Manager</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="Task Manager home"><span class="brand-mark">T</span><span>Task Manager</span></a>
+    <nav class="nav-list" aria-label="Task views">
+      <button class="nav-item active" data-filter="all"><span class="nav-icon">▦</span><span>All tasks</span><span class="nav-count" id="all-count">0</span></button>
+      <button class="nav-item" data-filter="today"><span class="nav-icon">◷</span><span>Today</span><span class="nav-count" id="today-count">0</span></button>
+      <button class="nav-item" data-filter="active"><span class="nav-icon">○</span><span>Active</span><span class="nav-count" id="active-count">0</span></button>
+      <button class="nav-item" data-filter="completed"><span class="nav-icon">✓</span><span>Completed</span><span class="nav-count" id="completed-count">0</span></button>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="theme-button" id="theme-button" type="button"><span id="theme-icon">◐</span><span>Dark mode</span></button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="mobile-menu" id="mobile-menu" type="button" aria-label="Open menu">☰</button>
+      <label class="search">
+        <span>⌕</span>
+        <input id="search-input" type="search" placeholder="Search tasks..." autocomplete="off">
+        <kbd>⌘ K</kbd>
+      </label>
+      <button class="add-button" id="add-button" type="button"><span>＋</span> New task</button>
+    </header>
+
+    <section class="content">
+      <div class="heading-row">
+        <div><p class="eyebrow" id="view-eyebrow">Workspace</p><h1 id="view-title">All tasks</h1></div>
+        <button class="clear-button" id="clear-button" type="button">Clear completed</button>
+      </div>
+
+      <div class="stats" id="stats">
+        <article><span class="stat-icon purple">✓</span><div><strong id="stat-total">0</strong><small>Total tasks</small></div></article>
+        <article><span class="stat-icon amber">◷</span><div><strong id="stat-today">0</strong><small>Due today</small></div></article>
+        <article><span class="stat-icon green">●</span><div><strong id="stat-progress">0%</strong><small>Completed</small></div></article>
+      </div>
+
+      <div class="task-toolbar">
+        <div class="filter-chips" role="group" aria-label="Filter by status">
+          <button class="chip active" data-status="all" type="button">All</button>
+          <button class="chip" data-status="active" type="button">Active</button>
+          <button class="chip" data-status="completed" type="button">Completed</button>
+        </div>
+        <label class="sort-label">Sort
+          <select id="sort-select"><option value="newest">Newest</option><option value="oldest">Oldest</option><option value="priority">Priority</option><option value="due">Due date</option></select>
+        </label>
+      </div>
+
+      <div class="task-list" id="task-list"></div>
+      <div class="empty-state" id="empty-state" hidden>
+        <div class="empty-icon">✓</div>
+        <h2>No tasks found</h2><p>Create a task or change your filters.</p>
+        <button class="add-button empty-add" type="button">＋ Add a task</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="modal-backdrop" hidden>
+    <form class="task-modal" id="task-form">
+      <div class="modal-heading"><div><p class="eyebrow">Task details</p><h2 id="modal-title">Create task</h2></div><button class="icon-button" id="close-modal" type="button" aria-label="Close">×</button></div>
+      <label>Task name<input id="task-title" name="title" maxlength="120" placeholder="What needs to be done?" required></label>
+      <label>Description<textarea id="task-description" name="description" maxlength="500" placeholder="Add notes or context..."></textarea></label>
+      <div class="form-grid">
+        <label>Priority<select id="task-priority" name="priority"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select></label>
+        <label>Due date<input id="task-due" name="dueDate" type="date"></label>
+      </div>
+      <label>Category<input id="task-category" name="category" maxlength="40" placeholder="Work, Personal, Health..."></label>
+      <div class="modal-actions"><button class="cancel-button" id="cancel-modal" type="button">Cancel</button><button class="save-button" type="submit"><span>＋</span><span id="save-label">Create task</span></button></div>
+    </form>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,27 +1,26 @@
 package handlers
 
-import(
-	"os"
-	"net/http"
-	"net/http/test"
-	"testing"
+import (
 	"bytes"
-	"Task Manager API project/internal/storage"
+	"net/http"
+	"net/http/httptest"
+	"os"
+	"testing"
+
+	"Task_Manager_API_project/internal/storage"
 )
 
-func TestCreateTest(t *testing.T){
+func TestCreateTask(t *testing.T) {
 	store := storage.NewFileStore("test_tasks.json")
 	defer os.Remove("test_tasks.json")
-
 	handler := NewTaskHandler(store)
 
-	body := []byte('{"title":"Learn Go", "completed":"false"}')
+	body := []byte(`{"title":"Learn Go","completed":false}`)
 	req := httptest.NewRequest(http.MethodPost, "/tasks", bytes.NewBuffer(body))
-	w := http.test.NewRecoder()
-
+	w := httptest.NewRecorder()
 	handler.Tasks(w, req)
 
-	if w.Code != http.StatusOk{
-		t.Fatalf("expected 200, got %d", w.Code)
+	if w.Code != http.StatusCreated {
+		t.Fatalf("expected 201, got %d", w.Code)
 	}
 }
